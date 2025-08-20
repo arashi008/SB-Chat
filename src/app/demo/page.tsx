@@ -248,84 +248,64 @@ export default function DemoPage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* 左側：現在の検索条件 & チャット */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* 現在の検索条件 */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Search className="w-5 h-5" />
-                  現在の検索条件
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* 候補者数表示 */}
-                <div className={`border rounded-lg p-4 transition-all duration-500 ${
-                  isUpdating 
-                    ? 'bg-yellow-50 border-yellow-200' 
-                    : candidateCount < 100 
-                      ? 'bg-red-50 border-red-200' 
-                      : candidateCount > 200 
-                        ? 'bg-green-50 border-green-200'
-                        : 'bg-blue-50 border-blue-200'
-                }`}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      {isUpdating ? (
-                        <Sparkles className="w-5 h-5 text-yellow-600 animate-spin" />
-                      ) : (
-                        <Users className={`w-5 h-5 ${
-                          candidateCount < 100 ? 'text-red-600' :
-                          candidateCount > 200 ? 'text-green-600' : 'text-blue-600'
-                        }`} />
-                      )}
-                      <span className="font-medium">候補者数</span>
-                    </div>
-                    <span className={`text-2xl font-bold transition-colors ${
-                      isUpdating ? 'text-yellow-600' :
+      <div className="container mx-auto px-4 py-6 max-w-6xl">
+        {/* 候補者数表示 */}
+        <Card className="mb-6">
+          <CardContent className="p-6">
+            <div className={`border rounded-lg p-6 transition-all duration-500 ${
+              isUpdating 
+                ? 'bg-yellow-50 border-yellow-200' 
+                : candidateCount < 100 
+                  ? 'bg-red-50 border-red-200' 
+                  : candidateCount > 200 
+                    ? 'bg-green-50 border-green-200'
+                    : 'bg-blue-50 border-blue-200'
+            }`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  {isUpdating ? (
+                    <Sparkles className="w-8 h-8 text-yellow-600 animate-spin" />
+                  ) : (
+                    <Users className={`w-8 h-8 ${
                       candidateCount < 100 ? 'text-red-600' :
                       candidateCount > 200 ? 'text-green-600' : 'text-blue-600'
-                    }`}>
-                      {candidateCount}名
-                    </span>
-                  </div>
-                  {candidateCount < 100 && !isUpdating && (
-                    <div className="mt-2 text-sm text-red-600">
-                      ⚠️ 候補者が少なくなっています
-                    </div>
+                    }`} />
                   )}
+                  <div>
+                    <h2 className="text-2xl font-bold">現在の候補者数</h2>
+                    {candidateCount < 100 && !isUpdating && (
+                      <p className="text-red-600 text-sm">⚠️ 条件を緩和することをお勧めします</p>
+                    )}
+                  </div>
                 </div>
+                <span className={`text-5xl font-bold transition-colors ${
+                  isUpdating ? 'text-yellow-600' :
+                  candidateCount < 100 ? 'text-red-600' :
+                  candidateCount > 200 ? 'text-green-600' : 'text-blue-600'
+                }`}>
+                  {candidateCount}名
+                </span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-                {/* 検索条件一覧 */}
-                <div className="space-y-2">
-                  {currentConditions.map((condition, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
-                    >
-                      <condition.icon className="w-4 h-4 text-gray-600" />
-                      <span className="text-sm font-medium capitalize">{condition.type}:</span>
-                      <Badge variant="secondary" className="text-xs">{condition.value}</Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* 左側：チャット */}
+          <div>
             {/* AIチャット */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <MessageCircle className="w-5 h-5 text-green-600" />
-                  AI チャット
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <MessageCircle className="w-6 h-6 text-green-600" />
+                  Green Scout AI
                 </CardTitle>
+                <CardDescription>自然言語で検索条件を追加・変更できます</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {/* メッセージ履歴 */}
-                  <div className="h-64 overflow-y-auto space-y-3 border rounded-lg p-3 bg-gray-50">
+                  <div className="h-80 overflow-y-auto space-y-4 border rounded-lg p-4 bg-gray-50">
                     {chatMessages.map((message) => (
                       <div
                         key={message.id}
@@ -411,56 +391,77 @@ export default function DemoPage() {
             </Card>
           </div>
 
-          {/* 右側：拡張提案 */}
-          <div className="lg:col-span-2">
+          {/* 右側：検索条件と拡張提案 */}
+          <div>
+            {/* 現在の検索条件 */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Search className="w-6 h-6" />
+                  現在の検索条件
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-3">
+                  {currentConditions.map((condition, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-blue-200"
+                    >
+                      <condition.icon className="w-5 h-5 text-blue-600" />
+                      <div className="flex-1">
+                        <div className="text-xs text-blue-600 font-medium uppercase">{condition.type}</div>
+                        <div className="font-semibold">{condition.value}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* AI拡張提案 */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Zap className="w-6 h-6 text-orange-600" />
                   AI拡張提案
                 </CardTitle>
                 <CardDescription>
-                  現在の条件を基にした候補者数拡大提案
+                  条件を緩和して候補者を増やす提案
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4">
                   {suggestions.map((suggestion) => (
-                    <Card
+                    <div
                       key={suggestion.id}
-                      className={`border-l-4 ${getPriorityColor(suggestion.priority)} hover:shadow-md transition-shadow`}
+                      className={`p-4 border-2 rounded-lg hover:shadow-md transition-all cursor-pointer ${
+                        suggestion.priority === 'high' ? 'border-red-200 bg-red-50' :
+                        suggestion.priority === 'medium' ? 'border-yellow-200 bg-yellow-50' :
+                        'border-green-200 bg-green-50'
+                      }`}
                     >
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-start gap-3 flex-1">
-                            <suggestion.icon className="w-5 h-5 text-gray-600 mt-1" />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <h3 className="font-semibold text-gray-900">
-                                  {suggestion.title}
-                                </h3>
-                                <Badge className={getImpactColor(suggestion.impact)}>
-                                  {suggestion.impact}
-                                </Badge>
-                              </div>
-                              <p className="text-gray-600 text-sm mb-2">
-                                {suggestion.description}
-                              </p>
-                              <div className="text-sm text-green-600 font-medium">
-                                予想効果: {suggestion.expectedIncrease}
-                              </div>
-                            </div>
-                          </div>
-                          <Button
-                            onClick={() => handleSuggestionApply(suggestion.id)}
-                            size="sm"
-                            className="ml-4"
-                          >
-                            適用する
-                          </Button>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <suggestion.icon className="w-6 h-6 text-gray-700" />
+                          <h3 className="font-bold text-lg text-gray-900">{suggestion.title}</h3>
                         </div>
-                      </CardContent>
-                    </Card>
+                        <div className="text-2xl font-bold text-green-600">
+                          {suggestion.expectedIncrease}
+                        </div>
+                      </div>
+                      <p className="text-gray-700 mb-4">{suggestion.description}</p>
+                      <Button
+                        onClick={() => handleSuggestionApply(suggestion.id)}
+                        className={`w-full ${
+                          suggestion.priority === 'high' ? 'bg-red-600 hover:bg-red-700' :
+                          suggestion.priority === 'medium' ? 'bg-yellow-600 hover:bg-yellow-700' :
+                          'bg-green-600 hover:bg-green-700'
+                        }`}
+                      >
+                        この提案を適用する
+                      </Button>
+                    </div>
                   ))}
                 </div>
               </CardContent>
