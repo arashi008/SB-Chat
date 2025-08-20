@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Send, User, Bot, Search, Users, TrendingUp, Zap } from "lucide-react"
+import { Send, User, Bot, Search, Users, TrendingUp, Zap, Home, Briefcase, Settings } from "lucide-react"
 import { parseConditionsImproved, type ParsedConditions } from "@/lib/keyword-mappings"
 
 interface Message {
@@ -114,24 +114,42 @@ export default function ChatInterface() {
 
         <nav className="flex-1 p-4 space-y-2">
           <Button
+            variant="ghost"
+            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
+          >
+            <Home size={18} />
+            ダッシュボード
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
+          >
+            <Users size={18} />
+            スカウト
+          </Button>
+          <Button
             variant="default"
             className="w-full justify-start gap-3 bg-sidebar-primary text-sidebar-primary-foreground"
           >
             <Search size={18} />
-            AI検索
+            検索
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
+          >
+            <Briefcase size={18} />
+            タレントピック
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
+          >
+            <Settings size={18} />
+            設定
           </Button>
         </nav>
 
-        {/* Candidate Count Display */}
-        <div className="p-4 border-t border-sidebar-border">
-          <div className="bg-primary/10 rounded-lg p-3">
-            <div className="flex items-center gap-2 mb-1">
-              <Users size={16} className="text-primary" />
-              <span className="text-sm font-medium text-sidebar-foreground">現在の候補者</span>
-            </div>
-            <div className="text-2xl font-bold text-primary">{candidateCount}名</div>
-          </div>
-        </div>
       </div>
 
       {/* Main Chat Area */}
@@ -140,12 +158,9 @@ export default function ChatInterface() {
         <div className="border-b border-border p-4 bg-card">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">
-                <Zap className="w-6 h-6 text-primary" />
-                Scout Base Chat
-              </h1>
+              <h1 className="text-xl font-semibold text-foreground">Scout Base Chat</h1>
               <p className="text-sm text-muted-foreground">
-                自然言語で検索条件を指定すると、AIが最適な候補者を見つけます
+                採用要件にマッチするタレントを、自動で気になるリスト化します。
               </p>
             </div>
             <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
@@ -170,32 +185,32 @@ export default function ChatInterface() {
               )}
 
               <Card
-                className={`max-w-[70%] p-4 ${
+                className={`max-w-[70%] p-3 ${
                   message.sender === "user" ? "bg-primary text-primary-foreground ml-auto" : "bg-card"
                 }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                 {message.parsedConditions && (
-                  <div className="mt-3 pt-3 border-t border-border/20">
+                  <div className="mt-2 pt-2 border-t border-border/20">
                     <div className="flex flex-wrap gap-1">
                       {message.parsedConditions.jobCategories.map((category) => (
                         <Badge key={category} variant="outline" className="text-xs">
-                          💼 {category}
+                          {category}
                         </Badge>
                       ))}
                       {message.parsedConditions.locations.map((location) => (
                         <Badge key={location} variant="outline" className="text-xs">
-                          📍 {location}
+                          {location}
                         </Badge>
                       ))}
                       {message.parsedConditions.ageRange && (
                         <Badge variant="outline" className="text-xs">
-                          👥 {message.parsedConditions.ageRange.min}-{message.parsedConditions.ageRange.max}歳
+                          {message.parsedConditions.ageRange.min}-{message.parsedConditions.ageRange.max}歳
                         </Badge>
                       )}
                       {message.parsedConditions.experience.map((exp) => (
                         <Badge key={exp} variant="outline" className="text-xs">
-                          ⭐ {exp}
+                          {exp}
                         </Badge>
                       ))}
                     </div>
@@ -249,7 +264,7 @@ export default function ChatInterface() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="例：BtoB営業の経験がある30代の方を都内で探しています"
+              placeholder="リストに追加するタレントの採用要件を入力してください。"
               className="flex-1"
             />
             <Button
@@ -260,42 +275,7 @@ export default function ChatInterface() {
               <Send size={16} />
             </Button>
           </div>
-          
-          {/* Quick Action Buttons */}
-          <div className="flex flex-wrap gap-2 mt-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setInputValue("法人営業経験3年以上、東京都")}
-              className="text-xs"
-            >
-              法人営業経験者
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setInputValue("エンジニア、リモート可能")}
-              className="text-xs"
-            >
-              リモートエンジニア
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setInputValue("30代、マネジメント経験")}
-              className="text-xs"
-            >
-              管理職候補
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setInputValue("年収600万以上")}
-              className="text-xs"
-            >
-              高年収層
-            </Button>
-          </div>
+          <p className="text-xs text-muted-foreground mt-2">例: 「BtoB営業の経験がある30代の方を都内で探しています」</p>
         </div>
       </div>
     </div>
