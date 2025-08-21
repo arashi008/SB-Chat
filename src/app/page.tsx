@@ -100,157 +100,78 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="flex h-screen bg-background">
-      {/* Sidebar */}
-      <div className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
-        <div className="p-4 border-b border-sidebar-border">
+    <div className="min-h-screen bg-background">
+      {/* Header with logo and horizontal navigation */}
+      <div className="border-b border-border">
+        <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">SB</span>
+            <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">SB</span>
             </div>
-            <span className="font-semibold text-sidebar-foreground">ScoutBase</span>
+            <span className="font-semibold text-foreground">ScoutBase</span>
           </div>
         </div>
-
-        <nav className="flex-1 p-4 space-y-2">
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
-          >
-            <Home size={18} />
+        
+        {/* Horizontal Navigation */}
+        <div className="flex gap-1 px-4 pb-2">
+          <Button variant="ghost" className="gap-2 text-sm">
+            <Home size={16} />
             ダッシュボード
           </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
-          >
-            <Users size={18} />
+          <Button variant="ghost" className="gap-2 text-sm">
+            <Users size={16} />
             スカウト
           </Button>
-          <Button
-            variant="default"
-            className="w-full justify-start gap-3 bg-sidebar-primary text-sidebar-primary-foreground"
-          >
-            <Search size={18} />
+          <Button variant="outline" className="gap-2 text-sm bg-primary/5 border-primary/20">
+            <Search size={16} />
             検索
           </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
-          >
-            <Briefcase size={18} />
+          <Button variant="ghost" className="gap-2 text-sm">
+            <Briefcase size={16} />
             タレントピック
           </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
-          >
-            <Settings size={18} />
+          <Button variant="ghost" className="gap-2 text-sm">
+            <Settings size={16} />
             設定
           </Button>
-        </nav>
-
+        </div>
       </div>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="border-b border-border p-4 bg-card">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-semibold text-foreground">Scout Base Chat</h1>
-              <p className="text-sm text-muted-foreground">
-                採用要件にマッチするタレントを、自動で気になるリスト化します。
-              </p>
-            </div>
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
-              β版
-            </Badge>
-          </div>
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto p-8">
+        {/* Title Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">Scout Base Chat</h1>
+          <p className="text-muted-foreground">
+            採用要件にマッチするタレントを、自動で気になるリスト化します。
+          </p>
+          <Badge variant="secondary" className="mt-2">
+            β版
+          </Badge>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="space-y-6 mb-8">
           {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex gap-3 ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-            >
-              {message.sender === "ai" && (
-                <Avatar className="w-8 h-8 bg-primary">
-                  <AvatarFallback className="bg-primary text-primary-foreground">
-                    <Bot size={16} />
-                  </AvatarFallback>
-                </Avatar>
-              )}
-
-              <Card
-                className={`max-w-[70%] p-3 ${
-                  message.sender === "user" ? "bg-primary text-primary-foreground ml-auto" : "bg-card"
-                }`}
-              >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                {message.parsedConditions && (
-                  <div className="mt-2 pt-2 border-t border-border/20">
-                    <div className="flex flex-wrap gap-1">
-                      {message.parsedConditions.jobCategories.map((category) => (
-                        <Badge key={category} variant="outline" className="text-xs">
-                          {category}
-                        </Badge>
-                      ))}
-                      {message.parsedConditions.locations.map((location) => (
-                        <Badge key={location} variant="outline" className="text-xs">
-                          {location}
-                        </Badge>
-                      ))}
-                      {message.parsedConditions.ageRange && (
-                        <Badge variant="outline" className="text-xs">
-                          {message.parsedConditions.ageRange.min}-{message.parsedConditions.ageRange.max}歳
-                        </Badge>
-                      )}
-                      {message.parsedConditions.experience.map((exp) => (
-                        <Badge key={exp} variant="outline" className="text-xs">
-                          {exp}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </Card>
-
-              {message.sender === "user" && (
-                <Avatar className="w-8 h-8 bg-muted">
-                  <AvatarFallback>
-                    <User size={16} />
-                  </AvatarFallback>
-                </Avatar>
-              )}
+            <div key={message.id}>
+              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
             </div>
           ))}
 
           {isTyping && (
-            <div className="flex gap-3 justify-start">
-              <Avatar className="w-8 h-8 bg-primary">
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  <Bot size={16} />
-                </AvatarFallback>
-              </Avatar>
-              <Card className="bg-card p-4">
-                <div className="flex gap-1">
-                  <div
-                    className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                    style={{ animationDelay: "0ms" }}
-                  />
-                  <div
-                    className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                    style={{ animationDelay: "150ms" }}
-                  />
-                  <div
-                    className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                    style={{ animationDelay: "300ms" }}
-                  />
-                </div>
-              </Card>
+            <div className="flex gap-1">
+              <div
+                className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                style={{ animationDelay: "0ms" }}
+              />
+              <div
+                className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                style={{ animationDelay: "150ms" }}
+              />
+              <div
+                className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                style={{ animationDelay: "300ms" }}
+              />
             </div>
           )}
 
@@ -258,7 +179,7 @@ export default function ChatInterface() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-border p-4 bg-card">
+        <div className="space-y-2">
           <div className="flex gap-2">
             <Input
               value={inputValue}
@@ -270,12 +191,13 @@ export default function ChatInterface() {
             <Button
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isTyping}
-              className="bg-primary hover:bg-primary/90"
             >
               <Send size={16} />
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">例: 「BtoB営業の経験がある30代の方を都内で探しています」</p>
+          <p className="text-xs text-muted-foreground">
+            例: 「BtoB営業の経験がある30代の方を都内で探しています」
+          </p>
         </div>
       </div>
     </div>
