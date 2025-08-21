@@ -78,39 +78,117 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="flex h-screen">
+    <div style={{ display: 'flex', height: '100vh' }}>
       {/* Left Sidebar */}
-      <div className="w-52 bg-teal-50 p-4">
-        <h2 className="text-sm font-medium text-gray-900 mb-4">Scout Base Chat</h2>
-        <Button className="w-full justify-start gap-2 bg-teal-600 hover:bg-teal-700 text-white text-sm rounded">
+      <div style={{ 
+        width: '200px', 
+        backgroundColor: '#d0f2e4', 
+        padding: '16px'
+      }}>
+        <h2 style={{ 
+          fontSize: '14px', 
+          fontWeight: '500', 
+          color: '#1f2937', 
+          marginBottom: '16px' 
+        }}>
+          Scout Base Chat
+        </h2>
+        <Button 
+          style={{ 
+            width: '100%', 
+            backgroundColor: '#059669', 
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            justifyContent: 'flex-start'
+          }}
+        >
           <Search size={16} />
           検索
         </Button>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col bg-white">
+      <div style={{ 
+        flex: '1', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        backgroundColor: 'white' 
+      }}>
         {/* Header */}
-        <div className="border-b p-4">
-          <div className="flex items-center gap-3">
-            <h1 className="text-lg font-medium">スカウト候補検索</h1>
-            <Badge className="bg-blue-100 text-blue-700 text-xs px-2 py-1">β版</Badge>
+        <div style={{ 
+          borderBottom: '1px solid #e5e7eb', 
+          padding: '16px' 
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '12px' 
+          }}>
+            <h1 style={{ 
+              fontSize: '18px', 
+              fontWeight: '500' 
+            }}>
+              スカウト候補検索
+            </h1>
+            <Badge style={{ 
+              backgroundColor: '#dbeafe', 
+              color: '#1d4ed8', 
+              fontSize: '12px', 
+              padding: '2px 8px' 
+            }}>
+              β版
+            </Badge>
           </div>
-          <p className="text-sm text-gray-600 mt-1">採用要件にマッチする候補者を調査します。......</p>
+          <p style={{ 
+            fontSize: '14px', 
+            color: '#6b7280', 
+            marginTop: '4px' 
+          }}>
+            採用要件にマッチする候補者を調査します。......
+          </p>
         </div>
 
         {/* Filters */}
-        <div className="border-b p-4 bg-gray-50">
-          <div className="flex gap-6">
-            <div className="flex items-center gap-2">
-              <span className="text-sm">クライアント名:</span>
-              <select className="border rounded px-3 py-1 text-sm bg-white">
+        <div style={{ 
+          borderBottom: '1px solid #e5e7eb', 
+          padding: '16px', 
+          backgroundColor: '#f9fafb' 
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            gap: '24px' 
+          }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px' 
+            }}>
+              <span style={{ fontSize: '14px' }}>クライアント名:</span>
+              <select style={{ 
+                border: '1px solid #d1d5db', 
+                borderRadius: '4px', 
+                padding: '4px 12px', 
+                fontSize: '14px', 
+                backgroundColor: 'white' 
+              }}>
                 <option>株式会社A</option>
               </select>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm">媒体:</span>
-              <select className="border rounded px-3 py-1 text-sm bg-white">
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px' 
+            }}>
+              <span style={{ fontSize: '14px' }}>媒体:</span>
+              <select style={{ 
+                border: '1px solid #d1d5db', 
+                borderRadius: '4px', 
+                padding: '4px 12px', 
+                fontSize: '14px', 
+                backgroundColor: 'white' 
+              }}>
                 <option>Wantedly</option>
               </select>
             </div>
@@ -118,44 +196,104 @@ export default function ChatInterface() {
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-1 p-6 overflow-y-auto">
-          <div className="space-y-6">
+        <div style={{ 
+          flex: '1', 
+          padding: '24px', 
+          overflowY: 'auto' 
+        }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {messages.map((message, index) => (
               <div key={message.id}>
                 {message.sender === "ai" ? (
-                  <div className="flex gap-3">
-                    <Avatar className="w-8 h-8 bg-teal-600 flex-shrink-0">
-                      <AvatarFallback className="bg-teal-600 text-white">
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <Avatar style={{ 
+                      width: '32px', 
+                      height: '32px', 
+                      backgroundColor: '#059669',
+                      flexShrink: 0
+                    }}>
+                      <AvatarFallback style={{ 
+                        backgroundColor: '#059669', 
+                        color: 'white' 
+                      }}>
                         <Bot size={16} />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1">
-                      <div className="text-sm text-gray-800 mb-3">{message.content}</div>
+                    <div style={{ flex: '1' }}>
+                      <div style={{ 
+                        fontSize: '14px', 
+                        color: '#1f2937', 
+                        marginBottom: '12px' 
+                      }}>
+                        {message.content}
+                      </div>
                       {message.showResults && (
-                        <div className="border rounded p-4 bg-white max-w-md">
-                          <div className="text-sm space-y-1 mb-3">
-                            <div>職種: corporate_sales</div>
-                            <div>勤務地: tokyo</div>
-                            <div>年齢: 30〜39歳</div>
+                        <div style={{ 
+                          border: '1px solid #e5e7eb', 
+                          borderRadius: '6px', 
+                          padding: '16px', 
+                          backgroundColor: 'white', 
+                          maxWidth: '384px' 
+                        }}>
+                          <div style={{ 
+                            fontSize: '14px', 
+                            marginBottom: '12px' 
+                          }}>
+                            <div style={{ marginBottom: '4px' }}>職種: corporate_sales</div>
+                            <div style={{ marginBottom: '4px' }}>勤務地: tokyo</div>
+                            <div style={{ marginBottom: '4px' }}>年齢: 30〜39歳</div>
                           </div>
-                          <div className="text-sm text-gray-600 mb-3">
+                          <div style={{ 
+                            fontSize: '14px', 
+                            color: '#6b7280', 
+                            marginBottom: '12px' 
+                          }}>
                             条件に合致する候補者を検索中です...
                           </div>
-                          <div className="flex gap-2">
-                            <span className="bg-gray-100 px-2 py-1 rounded text-xs">corporate_sales</span>
-                            <span className="bg-gray-100 px-2 py-1 rounded text-xs">tokyo</span>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <span style={{ 
+                              backgroundColor: '#f3f4f6', 
+                              padding: '4px 8px', 
+                              borderRadius: '4px', 
+                              fontSize: '12px' 
+                            }}>
+                              corporate_sales
+                            </span>
+                            <span style={{ 
+                              backgroundColor: '#f3f4f6', 
+                              padding: '4px 8px', 
+                              borderRadius: '4px', 
+                              fontSize: '12px' 
+                            }}>
+                              tokyo
+                            </span>
                           </div>
                         </div>
                       )}
                     </div>
                   </div>
                 ) : (
-                  <div className="flex gap-3 justify-end">
-                    <div className="bg-teal-600 text-white rounded-lg px-4 py-2 max-w-xs">
-                      <div className="text-sm">{message.content}</div>
+                  <div style={{ 
+                    display: 'flex', 
+                    gap: '12px', 
+                    justifyContent: 'flex-end' 
+                  }}>
+                    <div style={{ 
+                      backgroundColor: '#059669', 
+                      color: 'white', 
+                      borderRadius: '8px', 
+                      padding: '8px 16px', 
+                      maxWidth: '320px' 
+                    }}>
+                      <div style={{ fontSize: '14px' }}>{message.content}</div>
                     </div>
-                    <Avatar className="w-8 h-8 bg-gray-300 flex-shrink-0">
-                      <AvatarFallback className="bg-gray-300">
+                    <Avatar style={{ 
+                      width: '32px', 
+                      height: '32px', 
+                      backgroundColor: '#d1d5db',
+                      flexShrink: 0
+                    }}>
+                      <AvatarFallback style={{ backgroundColor: '#d1d5db' }}>
                         <User size={16} />
                       </AvatarFallback>
                     </Avatar>
@@ -165,13 +303,25 @@ export default function ChatInterface() {
             ))}
 
             {isTyping && (
-              <div className="flex gap-3">
-                <Avatar className="w-8 h-8 bg-teal-600">
-                  <AvatarFallback className="bg-teal-600 text-white">
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <Avatar style={{ 
+                  width: '32px', 
+                  height: '32px', 
+                  backgroundColor: '#059669' 
+                }}>
+                  <AvatarFallback style={{ 
+                    backgroundColor: '#059669', 
+                    color: 'white' 
+                  }}>
                     <Bot size={16} />
                   </AvatarFallback>
                 </Avatar>
-                <div className="text-sm text-gray-500">入力中...</div>
+                <div style={{ 
+                  fontSize: '14px', 
+                  color: '#6b7280' 
+                }}>
+                  入力中...
+                </div>
               </div>
             )}
           </div>
@@ -179,24 +329,37 @@ export default function ChatInterface() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t p-4">
-          <div className="flex gap-3">
+        <div style={{ 
+          borderTop: '1px solid #e5e7eb', 
+          padding: '16px' 
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            gap: '12px' 
+          }}>
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="リストに追加するタレントの採用要件を入力してください。"
-              className="flex-1"
+              style={{ flex: '1' }}
             />
             <Button
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isTyping}
-              className="bg-teal-600 hover:bg-teal-700"
+              style={{ 
+                backgroundColor: '#059669',
+                color: 'white'
+              }}
             >
               <Send size={16} />
             </Button>
           </div>
-          <div className="text-xs text-gray-500 mt-2">
+          <div style={{ 
+            fontSize: '12px', 
+            color: '#6b7280', 
+            marginTop: '8px' 
+          }}>
             例: 「BtoB営業の経験がある30代の方を都内で探しています」
           </div>
         </div>
