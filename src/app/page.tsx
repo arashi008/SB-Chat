@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Send, User, Bot, Search, Users, TrendingUp, Zap, Home, Briefcase, Settings } from "lucide-react"
+import { Send, User, Bot, Search } from "lucide-react"
 import { parseConditionsImproved, type ParsedConditions } from "@/lib/keyword-mappings"
 
 interface Message {
@@ -22,7 +22,7 @@ export default function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content: "こんにちは！Scout Base Chatです。どのような候補者をお探しですか？自然言語で検索条件を教えてください。",
+      content: "こんにちは！スカウト候補検索です。どのような人材をお探しですか？",
       sender: "ai",
       timestamp: new Date(),
     },
@@ -76,11 +76,7 @@ export default function ChatInterface() {
 
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: `検索条件を設定しました！\n\n${conditionsText || "条件を解析中..."}\n\n現在 **${newCount}名** の候補者が見つかりました。\n\n${
-          newCount < 50 ? "⚠️ 候補者が少ないため、条件の拡張をお勧めします。" :
-          newCount > 200 ? "✅ 十分な候補者が見つかりました！" : 
-          "💡 さらに条件を追加して絞り込むことも可能です。"
-        }`,
+        content: `以下の条件で人材を検索しました：\n\n${conditionsText || "条件を解析中..."}\n\n条件に合致する候補者を検索中です...`,
         sender: "ai",
         timestamp: new Date(),
         parsedConditions,
@@ -100,78 +96,119 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header with logo and horizontal navigation */}
-      <div className="border-b border-border">
-        <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">SB</span>
-            </div>
-            <span className="font-semibold text-foreground">ScoutBase</span>
-          </div>
-        </div>
-        
-        {/* Horizontal Navigation */}
-        <div className="flex gap-1 px-4 pb-2">
-          <Button variant="ghost" className="gap-2 text-sm">
-            <Home size={16} />
-            ダッシュボード
-          </Button>
-          <Button variant="ghost" className="gap-2 text-sm">
-            <Users size={16} />
-            スカウト
-          </Button>
-          <Button variant="outline" className="gap-2 text-sm bg-primary/5 border-primary/20">
+    <div className="flex h-screen bg-gray-50">
+      {/* Left Sidebar */}
+      <div className="w-52 bg-teal-50 flex flex-col">
+        <div className="p-4">
+          <h2 className="text-sm font-medium text-gray-800 mb-4">Scout Base Chat</h2>
+          <Button 
+            className="w-full justify-start gap-2 bg-teal-600 hover:bg-teal-700 text-white text-sm"
+          >
             <Search size={16} />
             検索
-          </Button>
-          <Button variant="ghost" className="gap-2 text-sm">
-            <Briefcase size={16} />
-            タレントピック
-          </Button>
-          <Button variant="ghost" className="gap-2 text-sm">
-            <Settings size={16} />
-            設定
           </Button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto p-8">
-        {/* Title Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Scout Base Chat</h1>
-          <p className="text-muted-foreground">
-            採用要件にマッチするタレントを、自動で気になるリスト化します。
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <div className="bg-white border-b border-gray-200 p-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg font-medium text-gray-900">スカウト候補検索</h1>
+            <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs">
+              β版
+            </Badge>
+          </div>
+          <p className="text-sm text-gray-600 mt-1">
+            採用要件にマッチする候補者を調査します。
           </p>
-          <Badge variant="secondary" className="mt-2">
-            β版
-          </Badge>
         </div>
 
-        {/* Messages */}
-        <div className="space-y-6 mb-8">
+        {/* Filters */}
+        <div className="bg-white border-b border-gray-200 p-4">
+          <div className="flex gap-4">
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-700">クライアント名:</label>
+              <select className="border border-gray-300 rounded px-3 py-1 text-sm bg-white">
+                <option>株式会社A</option>
+              </select>
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-700">媒体:</label>
+              <select className="border border-gray-300 rounded px-3 py-1 text-sm bg-white">
+                <option>Wantedly</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Messages */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((message) => (
-            <div key={message.id}>
-              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+            <div key={message.id} className="flex gap-3">
+              {message.sender === "ai" && (
+                <Avatar className="w-8 h-8 bg-teal-600 flex-shrink-0">
+                  <AvatarFallback className="bg-teal-600 text-white">
+                    <Bot size={16} />
+                  </AvatarFallback>
+                </Avatar>
+              )}
+              
+              <div className="flex-1">
+                {message.sender === "user" ? (
+                  <div className="flex justify-end">
+                    <div className="bg-teal-600 text-white rounded-lg px-4 py-2 max-w-xs">
+                      <p className="text-sm">{message.content}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="max-w-lg">
+                    <p className="text-sm text-gray-800 whitespace-pre-wrap">{message.content}</p>
+                    {message.parsedConditions && (
+                      <div className="mt-2 p-3 bg-gray-50 rounded border">
+                        <div className="flex flex-wrap gap-1">
+                          {message.parsedConditions.jobCategories.map((category) => (
+                            <Badge key={category} variant="outline" className="text-xs">
+                              {category}
+                            </Badge>
+                          ))}
+                          {message.parsedConditions.locations.map((location) => (
+                            <Badge key={location} variant="outline" className="text-xs">
+                              {location}
+                            </Badge>
+                          ))}
+                          {message.parsedConditions.ageRange && (
+                            <Badge variant="outline" className="text-xs">
+                              {message.parsedConditions.ageRange.min}-{message.parsedConditions.ageRange.max}歳
+                            </Badge>
+                          )}
+                          {message.parsedConditions.experience.map((exp) => (
+                            <Badge key={exp} variant="outline" className="text-xs">
+                              {exp}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           ))}
 
           {isTyping && (
-            <div className="flex gap-1">
-              <div
-                className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                style={{ animationDelay: "0ms" }}
-              />
-              <div
-                className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                style={{ animationDelay: "150ms" }}
-              />
-              <div
-                className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                style={{ animationDelay: "300ms" }}
-              />
+            <div className="flex gap-3">
+              <Avatar className="w-8 h-8 bg-teal-600">
+                <AvatarFallback className="bg-teal-600 text-white">
+                  <Bot size={16} />
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex gap-1 items-center">
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+              </div>
             </div>
           )}
 
@@ -179,7 +216,7 @@ export default function ChatInterface() {
         </div>
 
         {/* Input Area */}
-        <div className="space-y-2">
+        <div className="bg-white border-t border-gray-200 p-4">
           <div className="flex gap-2">
             <Input
               value={inputValue}
@@ -191,11 +228,12 @@ export default function ChatInterface() {
             <Button
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isTyping}
+              className="bg-teal-600 hover:bg-teal-700"
             >
               <Send size={16} />
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-gray-500 mt-2">
             例: 「BtoB営業の経験がある30代の方を都内で探しています」
           </p>
         </div>
